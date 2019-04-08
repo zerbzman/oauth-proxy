@@ -58,6 +58,36 @@ server.get('/', (req,res,next) => {
 
 })
 
+//should solve hash issue
+server.get('/auth-hash', function (req, res, next) {
+	let page = `<!DOCTYPE html>
+	<html lang="en" dir="ltr">
+		<head>
+			<meta charset="utf-8">
+			<title>Test auth</title>
+
+		</head>
+		<body>
+			<a id="replace" href="#">Click me</a>
+			<script type="text/javascript">
+				let address = window.location.href
+				if (window.location.hash !== "") {
+					let hash = "&" + window.location.hash.substring(1)
+					address = window.location.href.replace(window.location.hash, hash)
+				}
+				// replace pathname
+				if (window.location.pathname !== "") {
+					address = address.replace(window.location.pathname, "")
+				}
+				document.getElementById("replace").setAttribute("href", address);
+				document.getElementById("replace").click()
+			</script>
+		</body>
+	</html>`
+   res.sendRaw(200, page)
+   next()
+})
+
 server.listen(PORT, () => {
     console.log('%s listening at %s', server.name, server.url)
 })
